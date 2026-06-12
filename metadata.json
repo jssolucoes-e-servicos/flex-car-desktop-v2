@@ -1,0 +1,6 @@
+{
+  "name": "flexCar - Micro CRM",
+  "description": "Sistema de gestão para oficinas de chapeação e pintura flexCar, com gerador de orçamentos, recibos e gerenciamento de ordens de serviço.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
