@@ -34,6 +34,9 @@ export default function BudgetDetails({ budget, onBack, onPrint, onEdit, onAppro
     'EM_ANDAMENTO': theme === 'dark' ? 'bg-blue-900/30 text-blue-500 border-blue-800' : 'bg-blue-100 text-blue-800 border-blue-200',
     'FINALIZADO': theme === 'dark' ? 'bg-slate-700 text-slate-300 border-slate-600' : 'bg-slate-200 text-slate-700 border-slate-300',
   };
+
+  return (
+    <div className={`flex-1 ${theme === 'dark' ? 'bg-slate-900' : 'bg-slate-100'} flex flex-col h-full overflow-hidden select-text font-sans p-3`}>
       {/* Simulation Dialog Header */}
       <div className={`p-4 rounded-t border-t border-x shadow flex items-center justify-between ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-200 border-slate-300'}`}>
         <div>
@@ -56,171 +59,171 @@ export default function BudgetDetails({ budget, onBack, onPrint, onEdit, onAppro
       </div>
 
       {/* Main Content Pane inside dialog container */}
-      <div className={`flex-1 border-x border-b shadow p-4 overflow-auto space-y-4 rounded-b ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-300'}`}>
+      <div className={`flex-1 border-x border-b shadow p-4 overflow-auto space-y-4 rounded-b ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
         
         {/* Fields Area */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-3 text-white text-[11px] font-semibold">
+        <div className={`grid grid-cols-1 md:grid-cols-6 gap-3 text-[11px] font-semibold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
           
           {/* Row 1 */}
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Cadastrado em</span>
+            <span className="block uppercase tracking-tight text-[10px]">Cadastrado em</span>
             <input
               type="text"
               readOnly
               value={budget.createdAt}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-[#00a2ff] font-bold mt-1 outline-none font-mono"
+              className={`w-full border p-1 px-2 font-bold mt-1 outline-none font-mono ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-blue-400' : 'bg-slate-200 border-slate-300 text-blue-600'}`}
             />
           </div>
 
           <div className="md:col-span-2">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Cliente</span>
+            <span className="block uppercase tracking-tight text-[10px]">Cliente</span>
             <input
               type="text"
               readOnly
               value={budget.clientName}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-[#bde0fe] font-bold mt-1 outline-none uppercase"
+              className={`w-full border p-1 px-2 font-bold mt-1 outline-none uppercase ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-blue-300' : 'bg-slate-200 border-slate-300 text-slate-900'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Documento</span>
+            <span className="block uppercase tracking-tight text-[10px]">Documento</span>
             <input
               type="text"
               readOnly
               value={budget.document || '<< Não informado >>'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Telefone</span>
+            <span className="block uppercase tracking-tight text-[10px]">Telefone</span>
             <input
               type="text"
               readOnly
               value={budget.phone || '<< Não informado >>'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">E-mail</span>
+            <span className="block uppercase tracking-tight text-[10px]">E-mail</span>
             <input
               type="text"
               readOnly
               value={budget.email || '<< Não informado >>'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           {/* Row 2 - Address Block */}
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">CEP</span>
+            <span className="block uppercase tracking-tight text-[10px]">CEP</span>
             <input
               type="text"
               readOnly
               value={budget.cep || '<< Não informado >>'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           <div className="md:col-span-2">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Rua</span>
+            <span className="block uppercase tracking-tight text-[10px]">Rua</span>
             <input
               type="text"
               readOnly
               value={budget.rua || '<< Não informado >>'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Número / Compl.</span>
+            <span className="block uppercase tracking-tight text-[10px]">Número / Compl.</span>
             <input
               type="text"
               readOnly
               value={`${budget.numero || '-'} ${budget.complemento ? ' / ' + budget.complemento : ''}`}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Bairro</span>
+            <span className="block uppercase tracking-tight text-[10px]">Bairro</span>
             <input
               type="text"
               readOnly
               value={budget.bairro || '<< Não informado >>'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Cidade</span>
+            <span className="block uppercase tracking-tight text-[10px]">Cidade</span>
             <input
               type="text"
               readOnly
               value={budget.cidade || '<< Não informado >>'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none"
+              className={`w-full border p-1 px-2 mt-1 outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           {/* Row 3 - Car Block */}
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Marca</span>
+            <span className="block uppercase tracking-tight text-[10px]">Marca</span>
             <input
               type="text"
               readOnly
               value={budget.marca}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-[#00a2ff] font-bold mt-1 outline-none uppercase"
+              className={`w-full border p-1 px-2 font-bold mt-1 outline-none uppercase ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-blue-400' : 'bg-slate-200 border-slate-300 text-blue-700'}`}
             />
           </div>
 
           <div className="md:col-span-2">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Modelo</span>
+            <span className="block uppercase tracking-tight text-[10px]">Modelo</span>
             <input
               type="text"
               readOnly
               value={budget.modelo}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-[#00a2ff] font-bold mt-1 outline-none uppercase"
+              className={`w-full border p-1 px-2 font-bold mt-1 outline-none uppercase ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-blue-400' : 'bg-slate-200 border-slate-300 text-blue-700'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Placa</span>
+            <span className="block uppercase tracking-tight text-[10px]">Placa</span>
             <input
               type="text"
               readOnly
               value={budget.placa}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-[#00a2ff] font-bold tracking-widest mt-1 outline-none uppercase font-mono"
+              className={`w-full border p-1 px-2 font-bold tracking-widest mt-1 outline-none uppercase font-mono ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-blue-400' : 'bg-slate-200 border-slate-300 text-blue-700'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Ano</span>
+            <span className="block uppercase tracking-tight text-[10px]">Ano</span>
             <input
               type="text"
               readOnly
               value={budget.ano}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none font-mono"
+              className={`w-full border p-1 px-2 mt-1 outline-none font-mono ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           <div className="md:col-span-1">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">KM</span>
+            <span className="block uppercase tracking-tight text-[10px]">KM</span>
             <input
               type="text"
               readOnly
               value={budget.km || '-'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-1 px-2 text-neutral-200 mt-1 outline-none font-mono"
+              className={`w-full border p-1 px-2 mt-1 outline-none font-mono ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
 
           {/* Details/Observations */}
           <div className="md:col-span-6">
-            <span className="block text-neutral-300 uppercase tracking-tight text-[10px]">Detalhes / Observações adicionais</span>
+            <span className="block uppercase tracking-tight text-[10px]">Detalhes / Observações adicionais</span>
             <textarea
               readOnly
               value={budget.details || 'Sem especificações adicionais.'}
-              className="w-full bg-[#565960]/60 border border-neutral-500/70 p-2 text-neutral-200 mt-1 outline-none resize-none h-14"
+              className={`w-full border p-2 mt-1 outline-none resize-none h-14 ${theme === 'dark' ? 'bg-slate-950 border-slate-700' : 'bg-slate-200 border-slate-300'}`}
             />
           </div>
         </div>
@@ -300,12 +303,34 @@ export default function BudgetDetails({ budget, onBack, onPrint, onEdit, onAppro
               </span>
             </div>
 
+            {/* Actions: Approve / Edit */}
+            <div className="w-full flex flex-col gap-2 pt-4 border-t border-neutral-600">
+              {!budget.approved && (
+                <button
+                  onClick={() => onEdit && onEdit(budget)}
+                  className="w-full py-2 bg-slate-600 hover:bg-slate-500 rounded text-white text-xs font-bold uppercase tracking-widest"
+                >
+                  Editar Orçamento
+                </button>
+              )}
+              
+              {!budget.approved && (
+                <button
+                  onClick={() => onApprove && onApprove(budget.id)}
+                  className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-white text-xs font-bold uppercase tracking-widest"
+                >
+                  Aprovar Orçamento
+                </button>
+              )}
+            </div>
+
           {/* Quick status decoration checkmark */}
+          {budget.approved && (
             <div className={`text-[10px] font-bold p-1 px-3 rounded-full flex items-center gap-1.5 uppercase font-mono tracking-wider border ${statusColors[budget.status]}`}>
               <Check className="w-3.5 h-3.5 border-2 rounded-full p-0.5" />                
               <select
                 value={budget.status}
-                onChange={(e) => onStatusUpdate(budget.id, e.target.value)}
+                onChange={(e) => onStatusUpdate && onStatusUpdate(budget.id, e.target.value)}
                 className={`bg-transparent outline-none cursor-pointer ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}
               >
                   <option value="PENDENTE">Pendente</option>
@@ -314,6 +339,7 @@ export default function BudgetDetails({ budget, onBack, onPrint, onEdit, onAppro
                   <option value="FINALIZADO">Finalizado</option>
               </select>
             </div>
+          )}
           </div>
         </div>
       </div>

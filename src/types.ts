@@ -28,6 +28,7 @@ export interface Budget {
   items: ServiceItem[];
   totalValue: number;
   status: BudgetStatus;
+  approved: boolean;
 }
 
 export interface Receipt {

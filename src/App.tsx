@@ -11,6 +11,8 @@ import BudgetForm from './components/BudgetForm';
 import ReceiptList from './components/ReceiptList';
 import ReceiptForm from './components/ReceiptForm';
 import UserList from './components/UserList';
+import UserProfile from './components/UserProfile';
+import CompanySettings from './components/CompanySettings';
 import PrintPreview from './components/PrintPreview';
 import SplashScreen from './components/SplashScreen';
 
@@ -133,9 +135,40 @@ export default function App() {
   const saveNewBudget = (newBudget: Budget) => {
     const updated = [newBudget, ...budgets];
     handleSaveBudgets(updated);
-    // Directly focus on details of the newly created budget
-    setSelectedBudget(newBudget);
+    
+    setActiveTab('Atendimento');                
+    setActiveSubTab('Orçamentos');
     setActiveView('orçamentos_lista');
+
+    setModalComponent(<BudgetDetails 
+      budget={newBudget} 
+      onBack={() => { setModalComponent(null); }} 
+      onPrint={() => { setPrintBudget(newBudget); setModalComponent(null); }}
+      onEdit={(budgetToEdit) => {
+        setModalComponent(
+          <BudgetForm 
+            nextId={budgetToEdit.id} 
+            budgetToEdit={budgetToEdit}
+            onSave={(updatedBudget) => {
+              const updatedBudgets = budgets.map(b => b.id === updatedBudget.id ? updatedBudget : b);
+              handleSaveBudgets(updatedBudgets);
+              setModalComponent(null);
+            }} 
+            onCancel={() => setModalComponent(null)} 
+          />
+        );
+      }}
+      onApprove={(id) => {
+        const updatedBudgets = budgets.map(b => b.id === id ? { ...b, approved: true } : b);
+        handleSaveBudgets(updatedBudgets);
+        setModalComponent(null);
+      }}
+      onStatusUpdate={(id, newStatus) => {
+        const updatedBudgets = budgets.map(b => b.id === id ? { ...b, status: newStatus as any } : b);
+        handleSaveBudgets(updatedBudgets);
+        setModalComponent(null);
+      }}
+    />);
   };
 
   // Receipt operations
@@ -217,14 +250,28 @@ export default function App() {
             <div className={`pt-4 pb-2 px-4 text-xs font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>Cadastros</div>
             <button
                 onClick={() => { setActiveTab('Cadastros'); setActiveSubTab('Usuários'); setActiveView('usuarios_lista'); }}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${activeTab === 'Cadastros' ? 'bg-blue-600 text-white' : `${theme === 'dark' ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}`}
+                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${activeView === 'usuarios_lista' ? 'bg-blue-600 text-white' : `${theme === 'dark' ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}`}
             >
                 <Users className="w-5 h-5" />
                 Usuários
             </button>
         </nav>
 
-        <div className={`p-4 border-t ${theme === 'dark' ? 'border-slate-800' : 'border-slate-100'}`}>
+        <div className={`p-4 border-t ${theme === 'dark' ? 'border-slate-800' : 'border-slate-100'} space-y-2`}>
+            <button
+                onClick={() => setModalComponent(<UserProfile user={currentUser} onCancel={() => setModalComponent(null)} />)}
+                className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+                <Users className="w-5 h-5" />
+                Meu Perfil
+            </button>
+            <button
+                onClick={() => setModalComponent(<CompanySettings onCancel={() => setModalComponent(null)} />)}
+                className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+                <Building className="w-5 h-5" />
+                Empresa
+            </button>
             <button
                 onClick={() => setShowExitConfirm(true)}
                 className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${theme === 'dark' ? 'text-slate-400 hover:bg-red-900/40 hover:text-red-400' : 'text-slate-600 hover:bg-red-50 hover:text-red-600'}`}
@@ -267,11 +314,32 @@ export default function App() {
                   budget={b} 
                   onBack={() => { setModalComponent(null); }} 
                   onPrint={() => { setPrintBudget(b); setModalComponent(null); }}
-                  onEdit={() => {}}
-                  onApprove={() => {}}
-                  onStatusUpdate={() => {}}
+                  onEdit={(budgetToEdit) => {
+                    setModalComponent(
+                      <BudgetForm 
+                        nextId={budgetToEdit.id} 
+                        budgetToEdit={budgetToEdit}
+                        onSave={(updatedBudget) => {
+                          const updated = budgets.map(b => b.id === updatedBudget.id ? updatedBudget : b);
+                          handleSaveBudgets(updated);
+                          setModalComponent(null);
+                        }} 
+                        onCancel={() => setModalComponent(null)} 
+                      />
+                    );
+                  }}
+                  onApprove={(id) => {
+                    const updated = budgets.map(b => b.id === id ? { ...b, approved: true } : b);
+                    handleSaveBudgets(updated);
+                    setModalComponent(null);
+                  }}
+                  onStatusUpdate={(id, newStatus) => {
+                    const updated = budgets.map(b => b.id === id ? { ...b, status: newStatus as any } : b);
+                    handleSaveBudgets(updated);
+                    setModalComponent(null);
+                  }}
                 />)}
-              onNewBudget={() => setModalComponent(<BudgetForm nextId={getNextBudgetId()} onSave={(b) => { saveNewBudget(b); setModalComponent(null); }} onCancel={() => setModalComponent(null)} />)}
+              onNewBudget={() => setModalComponent(<BudgetForm nextId={getNextBudgetId()} onSave={(b) => { saveNewBudget(b); }} onCancel={() => setModalComponent(null)} />)}
               onPrintBudget={(b) => setPrintBudget(b)}
             />
           )}

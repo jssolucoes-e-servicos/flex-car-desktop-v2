@@ -17,7 +17,6 @@ export default function BudgetList({
   onPrintBudget,
 }: BudgetListProps) {
   const { theme } = useTheme();
-  const [searchField, setSearchField] = useState<'TUDO' | 'NOME' | 'PLACA' | 'MODELO'>('TUDO');
   const [searchQuery, setSearchQuery] = useState('');
 
   const clearSearch = () => {
@@ -31,23 +30,12 @@ export default function BudgetList({
     if (!searchQuery) return true;
     const query = searchQuery.toUpperCase();
     
-    if (searchField === 'TUDO') {
-        return (
-          b.clientName.toUpperCase().includes(query) ||
-          b.placa.toUpperCase().includes(query) ||
-          b.modelo.toUpperCase().includes(query) ||
-          b.id.toString().includes(query)
-        );
-    }
-    
-    if (searchField === 'NOME') {
-      return b.clientName.toUpperCase().includes(query);
-    } else if (searchField === 'PLACA') {
-      return b.placa.toUpperCase().includes(query);
-    } else if (searchField === 'MODELO') {
-      return b.modelo.toUpperCase().includes(query);
-    }
-    return true;
+    return (
+      b.clientName.toUpperCase().includes(query) ||
+      b.placa.toUpperCase().includes(query) ||
+      b.modelo.toUpperCase().includes(query) ||
+      b.id.toString().includes(query)
+    );
   });
 
   return (
@@ -62,16 +50,6 @@ export default function BudgetList({
 
         <div className="flex items-center gap-3">
           <div className={`flex items-center rounded-lg p-1 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-200'}`}>
-            <select
-              value={searchField}
-              onChange={(e) => setSearchField(e.target.value as any)}
-              className={`bg-transparent text-sm font-medium px-3 py-1.5 focus:outline-none ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}
-            >
-              <option value="TUDO">Tudo</option>
-              <option value="NOME">Cliente</option>
-              <option value="PLACA">Placa</option>
-              <option value="MODELO">Modelo</option>
-            </select>
             <input
                 type="text"
                 placeholder="Pesquisar..."

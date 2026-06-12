@@ -17,7 +17,6 @@ export default function ReceiptList({
   onPrintReceipt,
 }: ReceiptListProps) {
   const { theme } = useTheme();
-  const [searchField, setSearchField] = useState<'TUDO' | 'NOME' | 'NUMERO'>('TUDO');
   const [searchQuery, setSearchQuery] = useState('');
 
   const clearSearch = () => {
@@ -31,19 +30,10 @@ export default function ReceiptList({
     if (!searchQuery) return true;
     const query = searchQuery.toUpperCase();
     
-    if (searchField === 'TUDO') {
-      return (
-        r.recipientName.toUpperCase().includes(query) ||
-        r.id.toString().includes(query)
-      );
-    }
-
-    if (searchField === 'NOME') {
-      return r.recipientName.toUpperCase().includes(query);
-    } else if (searchField === 'NUMERO') {
-      return r.id.toString() === searchQuery.trim();
-    }
-    return true;
+    return (
+      r.recipientName.toUpperCase().includes(query) ||
+      r.id.toString().includes(query)
+    );
   });
 
   return (
@@ -58,15 +48,6 @@ export default function ReceiptList({
 
         <div className="flex items-center gap-3">
           <div className={`flex items-center rounded-lg p-1 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-200'}`}>
-            <select
-              value={searchField}
-              onChange={(e) => setSearchField(e.target.value as any)}
-              className={`bg-transparent text-sm font-medium px-3 py-1.5 focus:outline-none ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}
-            >
-              <option value="TUDO">Tudo</option>
-              <option value="NOME">Cliente</option>
-              <option value="NUMERO">Número</option>
-            </select>
             <input
               type="text"
               placeholder="Pesquisar..."

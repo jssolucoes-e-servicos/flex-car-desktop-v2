@@ -10,32 +10,32 @@ interface BudgetFormProps {
   onCancel: () => void;
 }
 
-export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps) {
+export default function BudgetForm({ nextId, budgetToEdit, onSave, onCancel }: BudgetFormProps) {
   const { theme } = useTheme();
   const [step, setStep] = useState<1 | 2>(1);
 
   // Form Inputs
-  const [clientName, setClientName] = useState('');
-  const [document, setDocument] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [clientName, setClientName] = useState(budgetToEdit?.clientName || '');
+  const [document, setDocument] = useState(budgetToEdit?.document || '');
+  const [phone, setPhone] = useState(budgetToEdit?.phone || '');
+  const [email, setEmail] = useState(budgetToEdit?.email || '');
   
-  const [cep, setCep] = useState('');
-  const [rua, setRua] = useState('');
-  const [numero, setNumero] = useState('');
-  const [complemento, setComplemento] = useState('');
-  const [bairro, setBairro] = useState('');
-  const [cidade, setCidade] = useState('');
+  const [cep, setCep] = useState(budgetToEdit?.cep || '');
+  const [rua, setRua] = useState(budgetToEdit?.rua || '');
+  const [numero, setNumero] = useState(budgetToEdit?.numero || '');
+  const [complemento, setComplemento] = useState(budgetToEdit?.complemento || '');
+  const [bairro, setBairro] = useState(budgetToEdit?.bairro || '');
+  const [cidade, setCidade] = useState(budgetToEdit?.cidade || '');
 
-  const [marca, setMarca] = useState('');
-  const [modelo, setModelo] = useState('');
-  const [placa, setPlaca] = useState('');
-  const [ano, setAno] = useState('');
-  const [km, setKm] = useState('');
-  const [details, setDetails] = useState('');
+  const [marca, setMarca] = useState(budgetToEdit?.marca || '');
+  const [modelo, setModelo] = useState(budgetToEdit?.modelo || '');
+  const [placa, setPlaca] = useState(budgetToEdit?.placa || '');
+  const [ano, setAno] = useState(budgetToEdit?.ano || '');
+  const [km, setKm] = useState(budgetToEdit?.km || '');
+  const [details, setDetails] = useState(budgetToEdit?.details || '');
 
   // Step 2 Item creation Inputs
-  const [items, setItems] = useState<ServiceItem[]>([]);
+  const [items, setItems] = useState<ServiceItem[]>(budgetToEdit?.items || []);
   const [itemName, setItemName] = useState('');
   const [itemValue, setItemValue] = useState('');
 
@@ -91,8 +91,12 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
     const dateStr = `${day}/${month}/${yearToday} ${hours}:${minutes}:${seconds}`;
 
     const newBudgetData: Budget = {
-      id: nextId,
-      createdAt: dateStr,
+      ...(budgetToEdit ? budgetToEdit : {
+        id: nextId,
+        createdAt: dateStr,
+        status: 'PENDENTE',
+        approved: false,
+      }),
       clientName: clientName.toUpperCase(),
       document,
       phone,
@@ -120,8 +124,7 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
 
   return (
     <div className={`flex-1 ${theme === 'dark' ? 'bg-slate-900' : 'bg-slate-100'} flex flex-col h-full overflow-hidden select-text font-sans p-3`}>
-      {/* Dialogue Header */}
-      <div className={`p-4 rounded-t border-t border-x shadow flex items-center justify-between ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-200 border-slate-300'}`}>
+      <div className={`p-4 rounded-t border-t border-x shadow flex items-center justify-between ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
         <div>
           <h2 className={`text-lg font-black tracking-wide uppercase ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
             Novo Orçamento
@@ -141,26 +144,26 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
       </div>
 
       {/* Main Dialog body */}
-      <div className={`flex-1 border-x border-b shadow p-4 overflow-auto rounded-b flex flex-col min-h-0 ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-300'}`}>
+      <div className={`flex-1 border-x border-b shadow p-4 overflow-auto rounded-b flex flex-col min-h-0 ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
         
         {/* Step 1: Customer & Vehicle Information Form */}
         {step === 1 ? (
           <form onSubmit={handleGoToItems} className="flex-1 flex flex-col justify-between min-h-0 gap-4">
-            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 text-white text-[11px] font-semibold overflow-y-auto pr-1">
+            <div className={`grid grid-cols-1 md:grid-cols-6 gap-3 text-[11px] font-semibold overflow-y-auto pr-1 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
               
               {/* Row 1 */}
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Orçamento</label>
+                <label className="block uppercase tracking-tight text-[10px]">Orçamento</label>
                 <input
                   type="text"
                   readOnly
                   value={nextId}
-                  className={`w-full border p-1.5 px-2 font-bold mt-1 outline-none font-mono text-center ${theme === 'dark' ? 'bg-slate-900 border-slate-700 text-blue-400' : 'bg-slate-100 border-slate-300 text-blue-600'}`}
+                  className={`w-full border p-1.5 px-2 font-bold mt-1 outline-none font-mono text-center ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-blue-400' : 'bg-slate-100 border-slate-300 text-blue-600'}`}
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Cliente *</label>
+                <label className="block uppercase tracking-tight text-[10px]">Cliente *</label>
                 <input
                   type="text"
                   required
@@ -172,7 +175,7 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">CPF / CNPJ</label>
+                <label className="block uppercase tracking-tight text-[10px]">CPF / CNPJ</label>
                 <input
                   type="text"
                   placeholder="000.000.000-00"
@@ -183,52 +186,52 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Telefone</label>
+                <label className="block uppercase tracking-tight text-[10px]">Telefone</label>
                 <input
                   type="text"
                   placeholder="(51) 90000-0000"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">E-mail</label>
+                <label className="block uppercase tracking-tight text-[10px]">E-mail</label>
                 <input
                   type="email"
                   placeholder="cliente@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               {/* Row 2: Address Block */}
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">CEP</label>
+                <label className="block uppercase tracking-tight text-[10px]">CEP</label>
                 <input
                   type="text"
                   placeholder="90000-000"
                   value={cep}
                   onChange={(e) => setCep(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Rua / Logradouro</label>
+                <label className="block uppercase tracking-tight text-[10px]">Rua / Logradouro</label>
                 <input
                   type="text"
                   placeholder="Ex: R. Veador Porto"
                   value={rua}
                   onChange={(e) => setRua(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Número / Compl.</label>
+                <label className="block uppercase tracking-tight text-[10px]">Número / Compl.</label>
                 <div className="flex gap-1.5">
                   <input
                     type="text"
@@ -236,7 +239,7 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
                     value={numero}
                     aria-label="Número do endereço"
                     onChange={(e) => setNumero(e.target.value)}
-                    className="w-20 bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                    className={`w-20 border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                   />
                   <input
                     type="text"
@@ -244,100 +247,100 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
                     value={complemento}
                     aria-label="Complemento"
                     onChange={(e) => setComplemento(e.target.value)}
-                    className="flex-1 bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                    className={`flex-1 border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                   />
                 </div>
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Bairro</label>
+                <label className="block uppercase tracking-tight text-[10px]">Bairro</label>
                 <input
                   type="text"
                   placeholder="Ex: Partenon"
                   value={bairro}
                   onChange={(e) => setBairro(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Cidade</label>
+                <label className="block uppercase tracking-tight text-[10px]">Cidade</label>
                 <input
                   type="text"
                   placeholder="Ex: Porto Alegre"
                   value={cidade}
                   onChange={(e) => setCidade(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff]"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               {/* Row 3: Car details */}
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Marca *</label>
+                <label className="block uppercase tracking-tight text-[10px]">Marca *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ex: HONDA"
                   value={marca}
                   onChange={(e) => setMarca(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-bold mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] uppercase placeholder-neutral-400"
+                  className={`w-full border p-1.5 px-2 font-bold mt-1 outline-none rounded focus:ring-1 uppercase placeholder-slate-500 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Modelo *</label>
+                <label className="block uppercase tracking-tight text-[10px]">Modelo *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ex: FIT"
                   value={modelo}
                   onChange={(e) => setModelo(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-bold mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] uppercase placeholder-neutral-400"
+                  className={`w-full border p-1.5 px-2 font-bold mt-1 outline-none rounded focus:ring-1 uppercase placeholder-slate-500 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Placa *</label>
+                <label className="block uppercase tracking-tight text-[10px]">Placa *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ex: IZP4C38"
                   value={placa}
                   onChange={(e) => setPlaca(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-bold tracking-widest mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] uppercase font-mono placeholder-neutral-400"
+                  className={`w-full border p-1.5 px-2 font-bold tracking-widest mt-1 outline-none rounded focus:ring-1 uppercase font-mono placeholder-slate-500 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Ano</label>
+                <label className="block uppercase tracking-tight text-[10px]">Ano</label>
                 <input
                   type="text"
                   placeholder="Ex: 2020"
                   value={ano}
                   onChange={(e) => setAno(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] font-mono"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 font-mono ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">KM</label>
+                <label className="block uppercase tracking-tight text-[10px]">KM</label>
                 <input
                   type="text"
                   placeholder="Ex: 85000"
                   value={km}
                   onChange={(e) => setKm(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] font-mono"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 font-mono ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               {/* Observation Detail */}
               <div className="md:col-span-6">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Detalhes / Observações adicionais</label>
+                <label className="block uppercase tracking-tight text-[10px]">Detalhes / Observações adicionais</label>
                 <textarea
                   placeholder="Descreva aqui observações do recebimento, avarias pré-existentes ou detalhes gerais..."
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-[#a1a1a1] p-2 text-neutral-800 placeholder-neutral-400 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] resize-none h-14"
+                  className={`w-full border p-2 font-medium mt-1 outline-none rounded focus:ring-1 resize-none h-14 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
             </div>
@@ -366,36 +369,38 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
           <div className="flex-1 flex flex-col justify-between min-h-0 gap-4">
             
             {/* Split Top section - Read Only Info summary */}
-            <div className="bg-[#484a50] p-3 text-white text-xs rounded border border-neutral-500 grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className={`p-3 text-xs rounded border grid grid-cols-1 md:grid-cols-3 gap-4 ${theme === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-100' : 'bg-slate-50 border-slate-200 text-slate-800'}`}>
               <div>
-                <span className="text-neutral-300 font-bold block text-[9px] uppercase">Cliente:</span>
-                <span className="font-bold uppercase text-[#bde0fe] truncate">{clientName}</span>
+                <span className={`font-bold block text-[9px] uppercase ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Cliente:</span>
+                <span className="font-bold uppercase truncate">{clientName}</span>
               </div>
               <div>
-                <span className="text-neutral-300 font-bold block text-[9px] uppercase">Veículo:</span>
+                <span className={`font-bold block text-[9px] uppercase ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Veículo:</span>
                 <span className="font-bold uppercase truncate">{marca} {modelo}</span>
               </div>
               <div>
-                <span className="text-neutral-300 font-bold block text-[9px] uppercase">Placa:</span>
-                <span className="font-mono font-bold uppercase text-[#00a2ff]">{placa}</span>
-              </div>
-              <div>
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  className="bg-neutral-600 hover:bg-neutral-500 text-neutral-100 p-0.5 px-2 rounded-full font-bold text-[9px] uppercase border border-neutral-400 mt-1"
-                >
-                  Alterar dados do veículo
-                </button>
+                <span className={`font-bold block text-[9px] uppercase ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Placa:</span>
+                <span className="font-mono font-bold uppercase">{placa}</span>
               </div>
             </div>
 
+            {/* Observation Detail */}
+            <div className={`p-4 border rounded ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+                <label className="block uppercase tracking-tight text-[10px] mb-1 font-bold">Detalhes / Observações adicionais</label>
+                <textarea
+                  placeholder="Descreva aqui observações do recebimento, avarias pré-existentes ou detalhes gerais..."
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                  className={`w-full border p-2 font-medium outline-none rounded focus:ring-1 resize-none h-14 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
+                />
+            </div>
+
             {/* Dynamic Items addition section */}
-            <div className="flex-1 flex flex-col min-h-0 bg-[#5c5f66] border border-neutral-500 p-3 rounded">
+            <div className={`flex-1 flex flex-col min-h-0 border rounded p-3 ${theme === 'dark' ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
               
-              <form onSubmit={handleAddItem} className="bg-[#4f5158] p-3 rounded-t border-b border-neutral-600 flex flex-col md:flex-row gap-3 items-end">
+              <form onSubmit={handleAddItem} className={`p-3 rounded-t border-b flex flex-col md:flex-row gap-3 items-end ${theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-200'}`}>
                 <div className="flex-1">
-                  <label className="block text-[10px] font-bold text-[#00a2ff] uppercase tracking-wider mb-1">
+                  <label className={`block text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>
                     Nome / Descrição do Serviço ou Peça
                   </label>
                   <input
@@ -404,12 +409,12 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
                     placeholder="Ex: TROCA E PINTURA DO PARACHOQUE TRASEIRO"
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
-                    className="w-full bg-white border border-neutral-400 text-neutral-800 p-1.5 text-xs font-bold rounded outline-none uppercase placeholder-neutral-400"
+                    className={`w-full border p-1.5 text-xs font-bold rounded outline-none uppercase ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-800'}`}
                   />
                 </div>
                 
                 <div className="w-full md:w-40">
-                  <label className="block text-[10px] font-bold text-[#00a2ff] uppercase tracking-wider mb-1">
+                  <label className={`block text-[10px] font-bold uppercase tracking-wider mb-1 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>
                     Valor Cobrado (R$)
                   </label>
                   <input
@@ -417,14 +422,14 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
                     placeholder="0,00"
                     value={itemValue}
                     onChange={(e) => setItemValue(e.target.value)}
-                    className="w-full bg-white border border-neutral-400 text-neutral-800 p-1.5 text-xs font-mono font-bold rounded text-right outline-none"
+                    className={`w-full border p-1.5 text-xs font-mono font-bold rounded text-right outline-none ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-800'}`}
                   />
                 </div>
 
                 <button
                   id="btn_incluir_item"
                   type="submit"
-                  className="w-full md:w-28 py-1.5 bg-[#4caf50] hover:bg-[#43a047] text-white font-bold text-xs rounded shadow flex justify-center items-center gap-1 shadow transition-colors"
+                  className="w-full md:w-28 py-1.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs rounded shadow flex justify-center items-center gap-1 shadow transition-colors"
                 >
                   <Check className="w-3.5 h-3.5" />
                   <span>Incluir</span>
@@ -432,27 +437,27 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
               </form>
 
               {/* Items List Table */}
-              <div className="flex-1 overflow-auto bg-[#6a6e77]">
+              <div className="flex-1 overflow-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-[#43454b] text-neutral-300 font-bold text-[10px] uppercase tracking-wider border-b border-neutral-500">
-                      <th className="px-3 py-2 border-r border-[#616161]">Item</th>
-                      <th className="px-3 py-2 border-r border-[#616161]">Descrição do Serviço / Peça</th>
-                      <th className="px-3 py-2 text-right w-36 border-r border-[#616161]">Valor</th>
+                    <tr className={`font-bold text-[10px] uppercase tracking-wider border-b ${theme === 'dark' ? 'bg-slate-700 border-slate-600 text-slate-300' : 'bg-slate-200 border-slate-300 text-slate-600'}`}>
+                      <th className="px-3 py-2 border-r border-slate-300/20">Item</th>
+                      <th className="px-3 py-2 border-r border-slate-300/20">Descrição do Serviço / Peça</th>
+                      <th className="px-3 py-2 text-right w-36 border-r border-slate-300/20">Valor</th>
                       <th className="px-3 py-2 text-center w-20">Ações</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-500/40 text-white font-semibold">
+                  <tbody className={`divide-y ${theme === 'dark' ? 'divide-slate-700/40 text-white' : 'divide-slate-200 text-slate-800'} font-semibold`}>
                     {items.length > 0 ? (
                       items.map((it, idx) => (
-                        <tr key={it.id} className="hover:bg-neutral-600/30 text-white even:bg-[#5e6169]/30">
-                          <td className="px-3 py-2 border-r border-[#616161]/80 text-[#00a2ff] font-mono text-center w-12">
+                        <tr key={it.id} className={`hover:opacity-80 ${theme === 'dark' ? 'bg-slate-900/40' : 'bg-slate-50'}`}>
+                          <td className={`px-3 py-2 border-r border-slate-300/20 text-center w-12 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'} font-mono`}>
                             {idx + 1}
                           </td>
-                          <td className="px-3 py-2 border-r border-[#616161]/80 uppercase">
+                          <td className="px-3 py-2 border-r border-slate-300/20 uppercase">
                             {it.name}
                           </td>
-                          <td className="px-3 py-2 border-r border-[#616161]/80 text-right font-mono text-[#54eb7c]">
+                          <td className={`px-3 py-2 border-r border-slate-300/20 text-right font-mono ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
                             R$ {it.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                           </td>
                           <td className="px-3 py-2 text-center">
@@ -460,7 +465,7 @@ export default function BudgetForm({ nextId, onSave, onCancel }: BudgetFormProps
                               id={`delete_item_btn_${idx}`}
                               type="button"
                               onClick={() => handleRemoveItem(it.id)}
-                              className="p-1 text-red-400 hover:text-red-300 hover:bg-neutral-600 rounded transition-colors"
+                              className={`p-1 rounded transition-colors ${theme === 'dark' ? 'text-red-400 hover:text-red-300 hover:bg-slate-800' : 'text-red-600 hover:text-red-700 hover:bg-slate-200'}`}
                               title="Remover serviço"
                             >
                               <Trash2 className="w-4 h-4" />

@@ -174,41 +174,41 @@ export default function ReceiptForm({ nextId, onSave, onCancel }: ReceiptFormPro
         <div className="space-y-4">
           
           {/* Section: Dados do Pagador / Recebedor */}
-          <div className="bg-[#555860] border border-neutral-600 rounded p-4">
-            <h3 className="text-xs font-bold text-[#00a2ff] uppercase tracking-wider mb-3 border-b border-neutral-600 pb-1">
+          <div className={`border rounded p-4 ${theme === 'dark' ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+            <h3 className={`text-xs font-bold uppercase tracking-wider mb-3 border-b pb-1 ${theme === 'dark' ? 'text-blue-400 border-slate-700' : 'text-blue-600 border-slate-200'}`}>
               Dados do Pagador / Recebedor
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-white text-[11px] font-semibold">
+            <div className={`grid grid-cols-1 md:grid-cols-4 gap-3 text-[11px] font-semibold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
               <div className="md:col-span-2">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Nome *</label>
+                <label className="block uppercase tracking-tight text-[10px]">Nome *</label>
                 <input
                   type="text"
                   required
                   placeholder="EX: LORENZO ANGRIZANI"
                   value={recipientName}
                   onChange={(e) => setRecipientName(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-bold mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] uppercase"
+                  className={`w-full border p-1.5 px-2 font-bold mt-1 outline-none rounded uppercase focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">CPF / CNPJ (Apenas números)</label>
+                <label className="block uppercase tracking-tight text-[10px]">CPF / CNPJ (Apenas números)</label>
                 <input
                   type="text"
                   placeholder="000.000.000-00"
                   value={document}
                   onChange={(e) => setDocument(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-medium mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] font-mono"
+                  className={`w-full border p-1.5 px-2 font-medium mt-1 outline-none rounded focus:ring-1 font-mono ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Tipo de Recibo</label>
+                <label className="block uppercase tracking-tight text-[10px]">Tipo de Recibo</label>
                 <select
                   value={receiptType}
                   onChange={(e) => setReceiptType(e.target.value as any)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-bold mt-1 h-[29px] outline-none rounded focus:ring-1 focus:ring-[#00a2ff] text-xs"
+                  className={`w-full border p-1.5 px-2 font-bold mt-1 h-[29px] outline-none rounded text-xs focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 focus:ring-blue-500'}`}
                 >
                   <option value="RECEBIMENTO">RECEBIMENTO</option>
                   <option value="PAGAMENTO">PAGAMENTO / ENTRADA</option>
@@ -218,42 +218,42 @@ export default function ReceiptForm({ nextId, onSave, onCancel }: ReceiptFormPro
           </div>
 
           {/* Section: Dados do Recibo */}
-          <div className="bg-[#555860] border border-neutral-600 rounded p-4">
-            <h3 className="text-xs font-bold text-[#00a2ff] uppercase tracking-wider mb-3 border-b border-neutral-600 pb-1">
+          <div className={`border rounded p-4 ${theme === 'dark' ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+            <h3 className={`text-xs font-bold uppercase tracking-wider mb-3 border-b pb-1 ${theme === 'dark' ? 'text-blue-400 border-slate-700' : 'text-blue-600 border-slate-200'}`}>
               Dados do Recibo de Valor
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-white text-[11px] font-semibold">
+            <div className={`grid grid-cols-1 md:grid-cols-4 gap-3 text-[11px] font-semibold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
               <div className="md:col-span-1">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Valor (R$) *</label>
+                <label className="block uppercase tracking-tight text-[10px]">Valor (R$) *</label>
                 <input
                   type="text"
                   required
                   placeholder="0,00"
                   value={valueStr}
                   onChange={handleValueChange}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-1.5 px-2 text-neutral-800 font-bold mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] font-mono"
+                  className={`w-full border p-1.5 px-2 font-bold mt-1 outline-none rounded font-mono focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
 
               <div className="md:col-span-3">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Valor por extenso</label>
+                <label className="block uppercase tracking-tight text-[10px]">Valor por extenso</label>
                 <input
                   type="text"
                   readOnly
                   placeholder="Gerado automaticamente..."
                   value={valueExtenso}
-                  className="w-full bg-[#e9ecef] border border-neutral-400 p-1.5 px-2 text-neutral-600 font-bold mt-1 outline-none rounded font-mono uppercase"
+                  className={`w-full border p-1.5 px-2 font-bold mt-1 outline-none rounded font-mono uppercase ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-blue-400' : 'bg-slate-100 border-slate-300 text-blue-600'}`}
                 />
               </div>
 
               <div className="md:col-span-4">
-                <label className="block text-neutral-300 uppercase tracking-tight text-[10px]">Descrição do Recibo</label>
+                <label className="block uppercase tracking-tight text-[10px]">Descrição do Recibo</label>
                 <textarea
                   placeholder="Ex: SERVIÇOS DE CHAPEAÇÃO E REPARO DO PARACHOQUE DIANTEIRO DO VEÍCULO HONDA HRV"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-[#ffffff] border border-neutral-400 p-2 text-neutral-800 font-semibold mt-1 outline-none rounded focus:ring-1 focus:ring-[#00a2ff] h-16 uppercase placeholder-neutral-400 resize-none"
+                  className={`w-full border p-2 font-semibold mt-1 outline-none rounded h-16 uppercase resize-none focus:ring-1 ${theme === 'dark' ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-900' : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500'}`}
                 />
               </div>
             </div>
