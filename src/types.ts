@@ -6,6 +6,15 @@ export interface ServiceItem {
 
 export type BudgetStatus = 'PENDENTE' | 'APROVADO' | 'EM_ANDAMENTO' | 'FINALIZADO';
 
+export type PaymentMethod = 'DINHEIRO' | 'PIX' | 'CARTAO_DEBITO' | 'CARTAO_CREDITO_AVISTA' | 'CARTAO_CREDITO_PARCELADO';
+
+export interface PaymentEntry {
+  id: string;
+  amount: number;
+  method: PaymentMethod;
+  installments?: number;
+}
+
 export interface Budget {
   id: number;
   createdAt: string;
@@ -29,6 +38,7 @@ export interface Budget {
   totalValue: number;
   status: BudgetStatus;
   approved: boolean;
+  payments: PaymentEntry[];
 }
 
 export interface Receipt {

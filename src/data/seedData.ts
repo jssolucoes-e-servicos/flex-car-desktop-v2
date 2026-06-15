@@ -35,6 +35,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 2500,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 51,
@@ -61,6 +63,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 800,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 52,
@@ -87,6 +91,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 1050,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 36,
@@ -113,6 +119,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 1100,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 53,
@@ -139,6 +147,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 550,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 54,
@@ -165,6 +175,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 1600,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 55,
@@ -191,6 +203,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 1400,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 56,
@@ -217,6 +231,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 1200,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   },
   {
     id: 57,
@@ -242,6 +258,8 @@ export const seedBudgets: Budget[] = [
     ],
     totalValue: 800,
     status: 'PENDENTE',
+    approved: false,
+    payments: [],
   }
 ];
 

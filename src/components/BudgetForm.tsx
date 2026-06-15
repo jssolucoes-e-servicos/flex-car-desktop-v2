@@ -115,6 +115,7 @@ export default function BudgetForm({ nextId, budgetToEdit, onSave, onCancel }: B
       details,
       items,
       totalValue,
+      payments: [],
     };
 
     onSave(newBudgetData);

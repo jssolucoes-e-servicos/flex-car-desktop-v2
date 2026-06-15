@@ -23,8 +23,35 @@ export default function BudgetList({
     setSearchQuery('');
   };
 
+  const statusColors: Record<string, string> = {
+    'PENDENTE': 'bg-amber-100 text-amber-800',
+    'APROVADO': 'bg-blue-100 text-blue-800',
+    'EM_ANDAMENTO': 'bg-indigo-100 text-indigo-800',
+    'FINALIZADO': 'bg-green-100 text-green-800',
+  };
+
   // Order by ID descending
-  const sortedBudgets = [...budgets].sort((a, b) => b.id - a.id);
+  const [sortConfig, setSortConfig] = useState<{key: keyof Budget, direction: 'asc' | 'desc'}>({key: 'id', direction: 'desc'});
+  
+  const sortedBudgets = [...budgets].sort((a, b) => {
+    let aVal = a[sortConfig.key];
+    let bVal = b[sortConfig.key];
+    if (aVal === bVal) return 0;
+    
+    if (sortConfig.direction === 'asc') {
+      return (aVal ?? '') < (bVal ?? '') ? -1 : 1;
+    } else {
+      return (aVal ?? '') > (bVal ?? '') ? -1 : 1;
+    }
+  });
+  
+  const handleSort = (key: keyof Budget) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+        direction = 'desc';
+    }
+    setSortConfig({key, direction});
+  };
 
   const filteredBudgets = sortedBudgets.filter((b) => {
     if (!searchQuery) return true;
@@ -80,12 +107,14 @@ export default function BudgetList({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className={`border-b ${theme === 'dark' ? 'border-slate-700 text-slate-500' : 'border-slate-100 text-slate-400'} text-xs uppercase tracking-wider font-semibold`}>
-              <th className="px-6 py-4">ID</th>
-              <th className="px-6 py-4">Cliente</th>
-              <th className="px-6 py-4">Marca</th>
-              <th className="px-6 py-4">Modelo</th>
-              <th className="px-6 py-4 text-center">Placa</th>
-              <th className="px-6 py-4 text-right">Valor</th>
+              <th className="px-6 py-4 cursor-pointer" onClick={() => handleSort('id')}>ID</th>
+              <th className="px-6 py-4 cursor-pointer" onClick={() => handleSort('approved')}>Aprovado</th>
+              <th className="px-6 py-4 cursor-pointer" onClick={() => handleSort('status')}>Status</th>
+              <th className="px-6 py-4 cursor-pointer" onClick={() => handleSort('clientName')}>Cliente</th>
+              <th className="px-6 py-4 cursor-pointer" onClick={() => handleSort('marca')}>Marca</th>
+              <th className="px-6 py-4 cursor-pointer" onClick={() => handleSort('modelo')}>Modelo</th>
+              <th className="px-6 py-4 cursor-pointer" onClick={() => handleSort('placa')}>Placa</th>
+              <th className="px-6 py-4 cursor-pointer text-right" onClick={() => handleSort('totalValue')}>Valor</th>
               <th className="px-6 py-4 text-center">Ações</th>
             </tr>
           </thead>
@@ -98,6 +127,16 @@ export default function BudgetList({
                   className={`cursor-pointer text-sm font-medium transition-colors ${theme === 'dark' ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-700 hover:bg-slate-50'}`}
                 >
                   <td className="px-6 py-4 text-slate-500 font-mono">#{b.id}</td>
+                  <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded text-xs font-bold ${b.approved ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                        {b.approved ? 'SIM' : 'NÃO'}
+                      </span>
+                  </td>
+                  <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded text-xs font-bold ${statusColors[b.status] || 'bg-slate-100'}`}>
+                        {b.status}
+                      </span>
+                  </td>
                   <td className="px-6 py-4">{b.clientName}</td>
                   <td className="px-6 py-4 text-slate-500">{b.marca}</td>
                   <td className="px-6 py-4 text-slate-500">{b.modelo}</td>
@@ -117,7 +156,7 @@ export default function BudgetList({
               ))
             ) : (
               <tr>
-                <td colSpan={7} className={`px-6 py-12 text-center text-slate-400`}>
+                <td colSpan={9} className={`px-6 py-12 text-center text-slate-400`}>
                   Nenhum orçamento encontrado.
                 </td>
               </tr>

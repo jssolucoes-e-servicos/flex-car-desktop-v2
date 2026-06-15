@@ -142,8 +142,10 @@ export default function App() {
 
     setModalComponent(<BudgetDetails 
       budget={newBudget} 
+      receipts={receipts}
       onBack={() => { setModalComponent(null); }} 
       onPrint={() => { setPrintBudget(newBudget); setModalComponent(null); }}
+      onPrintReceipt={(r) => { setPrintReceipt(r); setModalComponent(null); }}
       onEdit={(budgetToEdit) => {
         setModalComponent(
           <BudgetForm 
@@ -158,9 +160,10 @@ export default function App() {
           />
         );
       }}
-      onApprove={(id) => {
+      onApprove={(id, payments, newReceipts) => {
         const updatedBudgets = budgets.map(b => b.id === id ? { ...b, approved: true } : b);
         handleSaveBudgets(updatedBudgets);
+        handleSaveReceipts([...receipts, ...newReceipts]);
         setModalComponent(null);
       }}
       onStatusUpdate={(id, newStatus) => {
@@ -312,8 +315,10 @@ export default function App() {
               budgets={budgets}
               onSelectBudget={(b) => setModalComponent(<BudgetDetails 
                   budget={b} 
+                  receipts={receipts}
                   onBack={() => { setModalComponent(null); }} 
                   onPrint={() => { setPrintBudget(b); setModalComponent(null); }}
+                  onPrintReceipt={(r) => { setPrintReceipt(r); setModalComponent(null); }}
                   onEdit={(budgetToEdit) => {
                     setModalComponent(
                       <BudgetForm 
@@ -328,9 +333,10 @@ export default function App() {
                       />
                     );
                   }}
-                  onApprove={(id) => {
+                  onApprove={(id, payments, newReceipts) => {
                     const updated = budgets.map(b => b.id === id ? { ...b, approved: true } : b);
                     handleSaveBudgets(updated);
+                    handleSaveReceipts([...receipts, ...newReceipts]);
                     setModalComponent(null);
                   }}
                   onStatusUpdate={(id, newStatus) => {

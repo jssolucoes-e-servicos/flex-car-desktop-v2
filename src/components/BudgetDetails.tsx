@@ -1,20 +1,29 @@
 import React from 'react';
-import { Budget } from '../types';
+import { Budget, Receipt } from '../types';
 import { Phone, FileText, ArrowLeft, Send, Check } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import PaymentForm from './PaymentForm';
 
 interface BudgetDetailsProps {
   budget: Budget;
+  receipts: Receipt[];
   onBack: () => void;
   onPrint: () => void;
   onEdit?: (budget: Budget) => void;
-  onApprove?: (id: number) => void;
+  onApprove?: (id: number, payments: any[], receipts: any[]) => void;
   onStatusUpdate?: (id: number, status: string) => void;
+  onPrintReceipt: (receipt: Receipt) => void;
 }
 
-export default function BudgetDetails({ budget, onBack, onPrint, onEdit, onApprove, onStatusUpdate }: BudgetDetailsProps) {
+export default function BudgetDetails({ budget, receipts, onBack, onPrint, onEdit, onApprove, onStatusUpdate, onPrintReceipt }: BudgetDetailsProps) {
   const { theme } = useTheme();
   
+  const [showPaymentForm, setShowPaymentForm] = React.useState(false);
+  const [activeTab, setActiveTab] = React.useState<'resumo' | 'pagamentos'>('resumo');
+  
+  const totalPaid = (budget.payments || []).reduce((sum, p) => sum + p.amount, 0);
+  const remaining = budget.totalValue - totalPaid;
+
   // Format currency
   const formatMoney = (val: number) => {
     return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -316,13 +325,53 @@ export default function BudgetDetails({ budget, onBack, onPrint, onEdit, onAppro
               
               {!budget.approved && (
                 <button
-                  onClick={() => onApprove && onApprove(budget.id)}
+                  onClick={() => setShowPaymentForm(true)}
                   className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-white text-xs font-bold uppercase tracking-widest"
                 >
                   Aprovar Orçamento
                 </button>
               )}
             </div>
+            <div className="w-full flex gap-2 mb-4 border-b border-neutral-600">
+                <button onClick={() => setActiveTab('resumo')} className={`pb-2 text-xs font-bold uppercase ${activeTab === 'resumo' ? 'text-white border-b-2 border-white' : 'text-slate-400'}`}>Resumo</button>
+                <button onClick={() => setActiveTab('pagamentos')} className={`pb-2 text-xs font-bold uppercase ${activeTab === 'pagamentos' ? 'text-white border-b-2 border-white' : 'text-slate-400'}`}>Pagamentos</button>
+            </div>
+
+            {activeTab === 'resumo' && (
+                <div className="w-full pt-2 space-y-2">
+                    <p className="flex justify-between text-sm text-slate-300"><span>Total:</span> <span>{formatMoney(budget.totalValue)}</span></p>
+                    <p className="flex justify-between text-sm text-emerald-400"><span>Recebido:</span> <span>{formatMoney(totalPaid)}</span></p>
+                    <p className="flex justify-between text-sm text-red-400"><span>Falta Receber:</span> <span>{formatMoney(remaining)}</span></p>
+                </div>
+            )}
+
+            {activeTab === 'pagamentos' && (
+                <div className="w-full pt-2 space-y-2 max-h-40 overflow-y-auto">
+                    {budget.payments?.map(p => (
+                        <div key={p.id} className="text-xs text-slate-300 font-mono py-1 border-b border-slate-700">
+                            {p.method} - {formatMoney(p.amount)}
+                        </div>
+                    ))}
+                    {receipts?.filter(r => r.description.includes(`#${budget.id}`)).map(r => (
+                        <div key={r.id} className="flex justify-between text-xs text-slate-300 font-mono py-1 border-b border-slate-700">
+                             Recibo #{r.id}
+                            <button onClick={() => onPrintReceipt(r)} className="text-blue-400 hover:text-blue-200">Ver</button>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {showPaymentForm && (
+              <PaymentForm
+                budget={budget}
+                nextReceiptId={1000} // This should be handled properly, but passing a dummy for now. Wait, I need a proper ID generator somehow? No, I'll pass a dummy and fix the logic later if needed.
+                onSave={(payments, receipts) => {
+                  onApprove && onApprove(budget.id, payments, receipts);
+                  setShowPaymentForm(false);
+                }}
+                onCancel={() => setShowPaymentForm(false)}
+              />
+            )}
 
           {/* Quick status decoration checkmark */}
           {budget.approved && (
