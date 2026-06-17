@@ -20,9 +20,10 @@ export default defineConfig({
     }
   },
   renderer: {
+    root: 'src/renderer',
     rollupOptions: {
       input: {
-        main: 'src/renderer/index.html',
+        main: 'index.html',
       },
     },
   },
