@@ -17,11 +17,22 @@ function createWindow() {
   });
 
   // In production, load the local index.html file
-  // In development, load the vite dev server URL (e.g., localhost:3000)
+  // In development, load the vite dev server URL (e.g., localhost:5173)
+  const loadUrl = () => {
+    win.loadURL('http://localhost:5173').catch((err) => {
+      console.error('Erro ao carregar URL do Vite, tentando novamente...', err);
+      setTimeout(loadUrl, 2000);
+    });
+  };
+
   if (process.env.NODE_ENV === 'development') {
-    win.loadURL('http://localhost:3000');
+    loadUrl();
+    win.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+      console.error(`Falha ao carregar: ${errorDescription} (${errorCode})`);
+      setTimeout(loadUrl, 2000);
+    });
   } else {
-    win.loadFile(path.join(__dirname, 'dist/index.html'));
+    win.loadFile(path.join(__dirname, 'out/renderer/index.html'));
   }
 
   win.on('closed', () => {
