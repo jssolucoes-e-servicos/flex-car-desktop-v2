@@ -21,6 +21,7 @@ export default defineConfig({
   },
   renderer: {
     root: 'src/renderer',
+    viteConfig: 'vite.config.ts',
     rollupOptions: {
       input: {
         main: 'index.html',
